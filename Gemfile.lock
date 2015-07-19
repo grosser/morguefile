@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    morguefile (0.0.0)
+    morguefile (0.1.0)
       json
 
 GEM

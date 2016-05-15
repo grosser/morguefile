@@ -16,12 +16,12 @@ describe Morguefile do
     end
 
     it "does not find unfindable" do
-      Morguefile.find_image('sdfsddfsjkhsdfjkhfdssdfhjksdfjk').should == nil
+      Morguefile.find_image('dsffdhjfdjhfdsjhfdsjhfdshjfdjhfsdjhfds').should == nil
     end
 
     it "encodes characters" do
-      url = "http://www.morguefile.com/archive/search/1/?q=cats+and+bees&sort=pop&photo_lib=morgueFile&key=xxx&sig=bbf50625eb3f77e2ce7347cc09e7af405ac4acb2a2c1f554fdaf19d6934d8607"
-      Morguefile.any_instance.should_receive(:open).with(url).and_return(OpenStruct.new(read: "{}"))
+      url = "http://morguefile.com/image/json?terms=cats+and+bees&sort=pop&af=morgueFile&key=xxx&sig=8529b7fb92ad554bf76012c2de191453e1f62d011e1d12365a39a1a964f01636"
+      Morguefile.any_instance.should_receive(:open).with(url).and_return(OpenStruct.new(read: "{\"doc\":[]}"))
       Morguefile.find_image('cats and bees')
     end
   end

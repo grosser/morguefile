@@ -10,9 +10,8 @@ class Morguefile
 
   def self.find_image(term)
     client = new(key || ENV.fetch('MORGUEFILE_KEY'), secret || ENV.fetch('MORGUEFILE_SECRET'))
-    result = client.search(term)
-    return unless result = result['doc'] # 404 -> nothing
-    result.first.fetch('Archive').fetch('file_path_large')
+    return unless result = client.search(term)['doc'].first
+    result.fetch('file_path_large')
   end
 
   def initialize(key, secret)
@@ -21,7 +20,7 @@ class Morguefile
   end
 
   def search(term)
-    response = get("/archive/search/1/?q=#{CGI.escape(term)}&sort=pop&photo_lib=morgueFile")
+    response = get("/image/json?terms=#{CGI.escape(term)}&sort=pop&af=morgueFile")
     JSON.parse(response)
   end
 
@@ -30,7 +29,7 @@ class Morguefile
   def get(path)
     signed = path.split('?').first.split("/").join("")
     signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), @key, signed)
-    url = "http://www.morguefile.com#{path}&key=#{@key}&sig=#{signature}"
+    url = "http://morguefile.com#{path}&key=#{@key}&sig=#{signature}"
     open(url).read
   end
 end
